@@ -95,7 +95,7 @@ const css = `
     inset: 0;
     background:
       linear-gradient(160deg, rgba(46,59,50,0.62) 0%, rgba(46,59,50,0.3) 50%, rgba(195,165,107,0.18) 100%),
-      url('https://images.unsplash.com/photo-1448630360428-65456885c650?w=1800&q=80') center/cover no-repeat;
+      url('/hero_bg_landscape.jpg') center/cover no-repeat;
     transform: scale(1.04);
     animation: heroZoom 14s ease-out forwards;
   }
@@ -276,7 +276,7 @@ const css = `
   .packages-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 2rem;
     margin-top: 4rem;
   }
   .package-card {
@@ -286,6 +286,7 @@ const css = `
     overflow: hidden;
     transition: background 0.35s;
     cursor: default;
+    border-radius: 12px;
   }
   .package-card::after {
     content: '';
@@ -774,7 +775,7 @@ const bodyHTML = `
   </div>
   <div class="gallery-grid reveal">
     <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1482275548304-a58859dc31b7?w=900&q=80" alt="Autumn stoop décor">
+      <img src="/images/autum-entry.jpg" alt="Autumn stoop décor">
       <div class="gallery-overlay"><span class="gallery-label">Autumn Entry</span></div>
     </div>
     <div class="gallery-item">
@@ -782,11 +783,11 @@ const bodyHTML = `
       <div class="gallery-overlay"><span class="gallery-label">Holiday Interiors</span></div>
     </div>
     <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&q=80" alt="NYC brownstone exterior">
+      <img src="/images/brownstone_stoop.jpg" alt="NYC brownstone exterior">
       <div class="gallery-overlay"><span class="gallery-label">Brownstone Stoop</span></div>
     </div>
     <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=80" alt="Spring floral styling">
+      <img src="/images/spring_floral.webp" alt="Spring floral styling">
       <div class="gallery-overlay"><span class="gallery-label">Spring Florals</span></div>
     </div>
     <div class="gallery-item">
@@ -794,7 +795,7 @@ const bodyHTML = `
       <div class="gallery-overlay"><span class="gallery-label">Winter Holiday</span></div>
     </div>
     <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=600&q=80" alt="Elegant table setting">
+      <img src="/images/dining_table.avif" alt="Elegant table setting">
       <div class="gallery-overlay"><span class="gallery-label">Dining Styling</span></div>
     </div>
   </div>
@@ -816,7 +817,7 @@ const bodyHTML = `
         </blockquote>
       </div>
       <div class="brownstone-image reveal reveal-delay-2">
-        <img src="https://images.unsplash.com/photo-1448630360428-65456885c650?w=900&q=80" alt="Upper West Side brownstone">
+        <img src="/images/historic_brownstone_image copy.jpg" alt="Upper West Side brownstone">
       </div>
     </div>
   </div>
