@@ -71,7 +71,7 @@ const css = `
     font-size: 0.75rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--forest) !important;
+    color: #000 !important;
     background: var(--gold);
     padding: 0.6rem 1.6rem;
     border-radius: 0;
@@ -119,7 +119,8 @@ const css = `
     font-size: 0.72rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--gold-light);
+    color: var(--white);
+    font-weight: 600;
     margin-bottom: 1.2rem;
   }
   .hero-title {
@@ -146,7 +147,7 @@ const css = `
     font-size: 0.76rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--forest);
+    color: #000;
     background: var(--gold);
     padding: 1rem 2.8rem;
     text-decoration: none;
@@ -532,7 +533,7 @@ const css = `
     font-size: 0.76rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--forest);
+    color: #000;
     background: var(--gold);
     padding: 1.15rem 3.2rem;
     text-decoration: none;
@@ -638,7 +639,7 @@ const bodyHTML = `
     <li><a href="#packages">Packages</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#cta" class="nav-cta">Book a Consultation</a></li>
+    <li><a href="/contact" class="nav-cta">Book a Consultation</a></li>
   </ul>
 </nav>
 
@@ -649,7 +650,7 @@ const bodyHTML = `
     <p class="hero-eyebrow">Upper West Side · New York City</p>
     <h1 class="hero-title">Seasonal<br><em>Splendor</em></h1>
     <p class="hero-subtitle">Elegant seasonal styling for brownstones and apartments across the Upper West Side.</p>
-    <a href="#cta" class="hero-btn">Book a Consultation</a>
+    <a href="/contact" class="hero-btn">Book a Consultation</a>
   </div>
   <div class="hero-scroll">Scroll</div>
 </section>
@@ -700,7 +701,7 @@ const bodyHTML = `
           <li>Decorative planters</li>
           <li>Installation &amp; removal</li>
         </ul>
-        <a href="#cta" class="package-cta">Enquire</a>
+        <a href="/contact" class="package-cta">Enquire</a>
       </div>
       <div class="package-card reveal reveal-delay-2">
         <p class="package-season">Winter</p>
@@ -712,7 +713,7 @@ const bodyHTML = `
           <li>Staircase décor</li>
           <li>Entryway wreath</li>
         </ul>
-        <a href="#cta" class="package-cta">Enquire</a>
+        <a href="/contact" class="package-cta">Enquire</a>
       </div>
       <div class="package-card reveal reveal-delay-3">
         <p class="package-season">All Four Seasons</p>
@@ -724,7 +725,7 @@ const bodyHTML = `
           <li>Autumn harvest décor</li>
           <li>Winter holiday installation</li>
         </ul>
-        <a href="#cta" class="package-cta">Enquire</a>
+        <a href="/contact" class="package-cta">Enquire</a>
       </div>
     </div>
   </div>
@@ -860,7 +861,7 @@ const bodyHTML = `
     <div class="divider"></div>
     <p class="section-body">Schedule your consultation today and discover what your home looks like at its most beautiful.</p>
     <div style="margin-top:0.5rem;">
-      <a href="mailto:hello@seasonalsplendor.com" class="cta-btn">Book a Consultation</a>
+      <a href="/contact" class="cta-btn">Book a Consultation</a>
       <a href="#packages" class="cta-btn outline">View Packages</a>
     </div>
   </div>
@@ -882,7 +883,7 @@ const bodyHTML = `
           <li><a href="#packages">Packages</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a href="#cta">Contact</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -908,8 +909,8 @@ const bodyHTML = `
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 Seasonal Splendor. All rights reserved.</span>
-      <span>Privacy Policy</span>
+      <span>© 2026 Seasonal Splendor. All rights reserved.</span>
+      <span><a href="/privacy-policy" style="color:inherit; text-decoration:none;">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
