@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import supabase from '../../lib/supabase'
 
 const css = `
   :root {
@@ -327,11 +328,18 @@ export default function ContactPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
-    // TODO: wire up Supabase insert here
-    // const { error } = await supabase.from('contact_submissions').insert([form])
-    // Simulate for now
-    await new Promise(r => setTimeout(r, 800))
+    const { error } = await supabase.from('contact_submissions').insert([form])
+    if (error) { setStatus('error'); return }
+    fetch('https://ecvsbunmfestnrhfgdjl.supabase.co/functions/v1/resend-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify(form)
+    }).catch(console.error)
     setStatus('success')
+
   }
 
   return (
@@ -427,6 +435,9 @@ export default function ContactPage() {
                   <button type="submit" className="submit-btn" disabled={status === 'loading'}>
                     {status === 'loading' ? 'Sending…' : 'Send Message'}
                   </button>
+                  {status === 'error' && (
+                    <p className="form-error">Something went wrong. Please try again.</p>
+                  )}
                 </form>
               )}
             </div>
