@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Masonry from 'react-masonry-css'
 
 const css = `
   :root {
@@ -36,9 +37,6 @@ const css = `
     align-items: center;
     justify-content: space-between;
     padding: 1.4rem 4rem;
-    transition: background 0.4s, box-shadow 0.4s;
-  }
-  nav.scrolled {
     background: rgba(244,241,236,0.96);
     backdrop-filter: blur(10px);
     box-shadow: 0 1px 24px rgba(46,59,50,0.08);
@@ -47,11 +45,9 @@ const css = `
     font-family: 'Playfair Display', serif;
     font-size: 1.25rem;
     letter-spacing: 0.04em;
-    color: var(--white);
+    color: var(--forest);
     text-decoration: none;
-    transition: color 0.3s;
   }
-  nav.scrolled .nav-logo { color: var(--forest); }
   .nav-links {
     display: flex;
     gap: 2.4rem;
@@ -61,20 +57,18 @@ const css = `
     font-size: 0.78rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
+    color: var(--charcoal);
     text-decoration: none;
     transition: color 0.3s;
   }
-  nav.scrolled .nav-links a { color: var(--charcoal); }
   .nav-links a:hover { color: var(--gold); }
   .nav-cta {
     font-size: 0.75rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #000 !important;
+    color: var(--forest) !important;
     background: var(--gold);
     padding: 0.6rem 1.6rem;
-    border-radius: 0;
     text-decoration: none;
     transition: background 0.3s !important;
   }
@@ -406,24 +400,22 @@ const css = `
   }
 
   /* ── GALLERY ── */
-  #gallery { background: var(--white); padding: 7rem 0 0; }
+  #gallery { background: var(--white); padding: 7rem 0; }
   .gallery-header { text-align: center; margin-bottom: 4rem; }
   .gallery-header .section-body { margin: 0 auto; text-align: center; }
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 280px 280px;
-    gap: 3px;
+  .masonry-grid {
+    display: flex;
+    gap: 6px;
+    width: 100%;
   }
+  .masonry-col { display: flex; flex-direction: column; gap: 6px; }
   .gallery-item {
     overflow: hidden;
     position: relative;
   }
-  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
-  .gallery-item:nth-child(4) { grid-column: span 2; grid-row: span 1; }
   .gallery-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
+    width: 100%; height: auto;
+    display: block;
     transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
   }
   .gallery-item:hover img { transform: scale(1.06); }
@@ -764,43 +756,7 @@ const bodyHTML = `
   </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="container">
-    <div class="gallery-header reveal">
-      <p class="section-label">Seasonal Transformations</p>
-      <h2 class="section-title">Homes <em>We've Styled</em></h2>
-      <div class="divider" style="margin:1.6rem auto;"></div>
-      <p class="section-body">Each installation is curated for the character of the home and the beauty of the season.</p>
-    </div>
-  </div>
-  <div class="gallery-grid reveal">
-    <div class="gallery-item">
-      <img src="/images/autum-entry.jpg" alt="Autumn stoop décor">
-      <div class="gallery-overlay"><span class="gallery-label">Autumn Entry</span></div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=600&q=80" alt="Holiday living room">
-      <div class="gallery-overlay"><span class="gallery-label">Holiday Interiors</span></div>
-    </div>
-    <div class="gallery-item">
-      <img src="/images/brownstone_stoop.jpg" alt="NYC brownstone exterior">
-      <div class="gallery-overlay"><span class="gallery-label">Brownstone Stoop</span></div>
-    </div>
-    <div class="gallery-item">
-      <img src="/images/spring_floral.webp" alt="Spring floral styling">
-      <div class="gallery-overlay"><span class="gallery-label">Spring Florals</span></div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=600&q=80" alt="Holiday decorated room">
-      <div class="gallery-overlay"><span class="gallery-label">Winter Holiday</span></div>
-    </div>
-    <div class="gallery-item">
-      <img src="/images/dining_table.avif" alt="Elegant table setting">
-      <div class="gallery-overlay"><span class="gallery-label">Dining Styling</span></div>
-    </div>
-  </div>
-</section>
+<!-- GALLERY_PLACEHOLDER -->
 
 <!-- BROWNSTONE EXPERTISE -->
 <section id="brownstone">
@@ -916,13 +872,17 @@ const bodyHTML = `
 </footer>
 `
 
+const galleryImages = [
+  { src: '/images/autum-entry.jpg', alt: 'Autumn Entry' },
+  { src: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=600&q=80', alt: 'Holiday Interiors' },
+  { src: '/images/brownstone_stoop.jpg', alt: 'Brownstone Stoop' },
+  { src: '/images/spring_floral.webp', alt: 'Spring Florals' },
+  { src: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=600&q=80', alt: 'Winter Holiday' },
+  { src: '/images/dining_table.avif', alt: 'Dining Styling' },
+]
+
 export default function Home() {
   useEffect(() => {
-    // Nav scroll behavior
-    const nav = document.getElementById('main-nav')
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 60)
-    window.addEventListener('scroll', onScroll)
-
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal')
     const observer = new IntersectionObserver((entries) => {
@@ -935,13 +895,36 @@ export default function Home() {
     }, { threshold: 0.12 })
     reveals.forEach(el => observer.observe(el))
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => observer.disconnect()
   }, [])
+
+  const [before, after] = bodyHTML.split('<!-- GALLERY_PLACEHOLDER -->')
 
   return (
     <>
       <style>{css}</style>
-      <div dangerouslySetInnerHTML={{ __html: bodyHTML }} />
+      <div dangerouslySetInnerHTML={{ __html: before }} />
+      <section id="gallery">
+        <div className="container">
+          <div className="gallery-header reveal">
+            <p className="section-label">Seasonal Transformations</p>
+            <h2 className="section-title">Homes <em>We've Styled</em></h2>
+            <div className="divider" style={{ margin: '1.6rem auto' }} />
+            <p className="section-body">Each installation is curated for the character of the home and the beauty of the season.</p>
+          </div>
+        </div>
+        <div className="container">
+          <Masonry breakpointCols={{ default: 3, 768: 2, 480: 1 }} className="masonry-grid" columnClassName="masonry-col">
+            {galleryImages.map((img) => (
+              <div key={img.src} className="gallery-item">
+                <img src={img.src} alt={img.alt} />
+                <div className="gallery-overlay"><span className="gallery-label">{img.alt}</span></div>
+              </div>
+            ))}
+          </Masonry>
+        </div>
+      </section>
+      <div dangerouslySetInnerHTML={{ __html: after }} />
     </>
   )
 }
