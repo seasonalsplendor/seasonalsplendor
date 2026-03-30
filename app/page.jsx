@@ -860,7 +860,7 @@ const bodyHTML = `
         </ul>
         <p class="footer-heading" style="margin-top:1.8rem;">Follow</p>
         <ul class="footer-links">
-          <li><a href="#">Instagram</a></li>
+          <li><a href="https://www.instagram.com/seasonal.splendornyc/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
         </ul>
       </div>
     </div>

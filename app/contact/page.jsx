@@ -483,7 +483,7 @@ export default function ContactPage() {
               </ul>
               <p className="footer-heading" style={{ marginTop: '1.8rem' }}>Follow</p>
               <ul className="footer-links">
-                <li><a href="#">Instagram</a></li>
+                <li><a href="https://www.instagram.com/seasonal.splendornyc/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
               </ul>
             </div>
           </div>
