@@ -1,3 +1,5 @@
+import './globals.css'
+
 export const metadata = {
   title: 'Seasonal Splendor — Elegant Seasonal Styling for Upper West Side Homes',
 }

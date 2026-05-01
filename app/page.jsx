@@ -1,780 +1,299 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import Masonry from 'react-masonry-css'
-
-const css = `
-  :root {
-    --cream: #F4F1EC;
-    --cream-dark: #EDE8DF;
-    --forest: #2E3B32;
-    --forest-light: #3d4f43;
-    --charcoal: #3A3A3A;
-    --gold: #C3A56B;
-    --gold-light: #d4bc8e;
-    --stone: #E7E2DA;
-    --white: #FDFBF8;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
-    color: var(--charcoal);
-    font-weight: 300;
-    overflow-x: hidden;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.4rem 4rem;
-    background: rgba(244,241,236,0.96);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 1px 24px rgba(46,59,50,0.08);
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    letter-spacing: 0.04em;
-    color: var(--forest);
-    text-decoration: none;
-  }
-  .nav-links {
-    display: flex;
-    gap: 2.4rem;
-    list-style: none;
-  }
-  .nav-links a {
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--charcoal);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-  .nav-cta {
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--forest) !important;
-    background: var(--gold);
-    padding: 0.6rem 1.6rem;
-    text-decoration: none;
-    transition: background 0.3s !important;
-  }
-  .nav-cta:hover { background: var(--gold-light) !important; }
-
-  /* ── HERO ── */
-  #hero {
-    position: relative;
-    height: 100vh;
-    min-height: 700px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(160deg, rgba(46,59,50,0.62) 0%, rgba(46,59,50,0.3) 50%, rgba(195,165,107,0.18) 100%),
-      url('/hero_bg_landscape.jpg') center/cover no-repeat;
-    transform: scale(1.04);
-    animation: heroZoom 14s ease-out forwards;
-  }
-  @keyframes heroZoom {
-    from { transform: scale(1.04); }
-    to   { transform: scale(1.00); }
-  }
-  .hero-content {
-    position: relative;
-    text-align: center;
-    color: var(--white);
-    padding: 0 2rem;
-    animation: heroFade 1.4s 0.3s ease both;
-  }
-  @keyframes heroFade {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .hero-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--white);
-    font-weight: 600;
-    margin-bottom: 1.2rem;
-  }
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.2rem, 7vw, 6rem);
-    font-weight: 400;
-    line-height: 1.05;
-    margin-bottom: 1.2rem;
-    letter-spacing: -0.01em;
-  }
-  .hero-title em { font-style: italic; color: var(--gold-light); }
-  .hero-subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    font-weight: 300;
-    letter-spacing: 0.04em;
-    color: rgba(253,251,248,0.82);
-    max-width: 520px;
-    margin: 0 auto 2.6rem;
-    line-height: 1.7;
-  }
-  .hero-btn {
-    display: inline-block;
-    font-size: 0.76rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #000;
-    background: var(--gold);
-    padding: 1rem 2.8rem;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.3s;
-  }
-  .hero-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
-  .hero-scroll {
-    position: absolute;
-    bottom: 2.4rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(253,251,248,0.5);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    animation: bounce 2.5s infinite;
-  }
-  .hero-scroll::after {
-    content: '';
-    width: 1px;
-    height: 44px;
-    background: linear-gradient(to bottom, rgba(195,165,107,0.7), transparent);
-  }
-  @keyframes bounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(6px); }
-  }
-
-  /* ── SECTION UTILITY ── */
-  section { padding: 7rem 0; }
-  .container { max-width: 1140px; margin: 0 auto; padding: 0 2.5rem; }
-  .section-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.9rem;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: 400;
-    line-height: 1.15;
-    color: var(--forest);
-    margin-bottom: 1.4rem;
-  }
-  .section-title em { font-style: italic; }
-  .section-body {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.18rem;
-    line-height: 1.85;
-    color: #555;
-    max-width: 600px;
-  }
-  .divider {
-    width: 48px;
-    height: 1.5px;
-    background: var(--gold);
-    margin: 1.6rem 0;
-  }
-
-  /* ── INTRO ── */
-  #intro { background: var(--white); }
-  .intro-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-  .intro-image {
-    position: relative;
-  }
-  .intro-image img {
-    width: 100%;
-    height: 540px;
-    object-fit: cover;
-    display: block;
-  }
-  .intro-image::before {
-    content: '';
-    position: absolute;
-    top: -20px; left: -20px;
-    right: 20px; bottom: 20px;
-    border: 1.5px solid var(--gold);
-    z-index: 0;
-  }
-  .intro-image img { position: relative; z-index: 1; }
-  .intro-badge {
-    position: absolute;
-    bottom: -1.5rem;
-    right: -1.5rem;
-    z-index: 2;
-    width: 110px; height: 110px;
-    background: var(--forest);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1rem;
-  }
-  .intro-badge span:first-child {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.9rem;
-    color: var(--gold);
-    line-height: 1;
-  }
-  .intro-badge span:last-child {
-    font-size: 0.58rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(244,241,236,0.7);
-    margin-top: 0.3rem;
-  }
-
-  /* ── PACKAGES ── */
-  #packages { background: var(--forest); }
-  #packages .section-title { color: var(--cream); }
-  #packages .section-label { color: var(--gold-light); }
-  #packages .section-body { color: rgba(244,241,236,0.65); }
-  #packages .divider { background: var(--gold); }
-  .packages-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 4rem;
-  }
-  .package-card {
-    background: var(--forest-light);
-    padding: 3rem 2.4rem;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.35s;
-    cursor: default;
-    border-radius: 12px;
-  }
-  .package-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transition: transform 0.4s;
-  }
-  .package-card:hover { background: #364a3d; }
-  .package-card:hover::after { transform: scaleX(1); }
-  .package-season {
-    font-size: 0.65rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-  .package-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.45rem;
-    color: var(--cream);
-    margin-bottom: 1.4rem;
-    line-height: 1.25;
-  }
-  .package-includes {
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.9rem;
-  }
-  .package-list {
-    list-style: none;
-  }
-  .package-list li {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    color: rgba(244,241,236,0.72);
-    padding: 0.4rem 0;
-    border-bottom: 1px solid rgba(195,165,107,0.12);
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-  }
-  .package-list li::before {
-    content: '—';
-    color: var(--gold);
-    font-size: 0.75rem;
-    flex-shrink: 0;
-  }
-  .package-cta {
-    display: inline-block;
-    margin-top: 2rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-decoration: none;
-    border-bottom: 1px solid var(--gold);
-    padding-bottom: 2px;
-    transition: color 0.3s;
-  }
-
-  /* ── HOW IT WORKS ── */
-  #how { background: var(--cream-dark); }
-  .steps-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3rem;
-    margin-top: 4rem;
-    position: relative;
-  }
-  .steps-grid::before {
-    content: '';
-    position: absolute;
-    top: 2rem;
-    left: 12.5%;
-    right: 12.5%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), var(--gold), transparent);
-    z-index: 0;
-  }
-  .step {
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-  .step-num {
-    width: 4rem; height: 4rem;
-    border-radius: 50%;
-    background: var(--white);
-    border: 1.5px solid var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.8rem;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--gold);
-    transition: background 0.3s, color 0.3s;
-  }
-  .step:hover .step-num { background: var(--gold); color: var(--white); }
-  .step-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--forest);
-    margin-bottom: 0.8rem;
-  }
-  .step-body {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
-    color: #666;
-    line-height: 1.7;
-  }
-
-  /* ── GALLERY ── */
-  #gallery { background: var(--white); padding: 7rem 0; }
-  .gallery-header { text-align: center; margin-bottom: 4rem; }
-  .gallery-header .section-body { margin: 0 auto; text-align: center; }
-  .masonry-grid {
-    display: flex;
-    gap: 6px;
-    width: 100%;
-  }
-  .masonry-col { display: flex; flex-direction: column; gap: 6px; }
-  .gallery-item {
-    overflow: hidden;
-    position: relative;
-  }
-  .gallery-item img {
-    width: 100%; height: auto;
-    display: block;
-    transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
-  }
-  .gallery-item:hover img { transform: scale(1.06); }
-  .gallery-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(46,59,50,0.7) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.5rem;
-  }
-  .gallery-item:hover .gallery-overlay { opacity: 1; }
-  .gallery-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--cream);
-  }
-
-  /* ── BROWNSTONE SECTION ── */
-  #brownstone {
-    background: var(--forest);
-    position: relative;
-    overflow: hidden;
-  }
-  #brownstone::before {
-    content: '';
-    position: absolute;
-    top: -80px; right: -80px;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(195,165,107,0.08) 0%, transparent 70%);
-  }
-  .brownstone-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-  #brownstone .section-title { color: var(--cream); }
-  #brownstone .section-label { color: var(--gold-light); }
-  #brownstone .section-body { color: rgba(244,241,236,0.7); }
-  #brownstone .divider { background: var(--gold); }
-  .brownstone-image img {
-    width: 100%;
-    height: 520px;
-    object-fit: cover;
-    filter: brightness(0.88) contrast(1.05);
-  }
-  .brownstone-quote {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1.5rem;
-    color: var(--gold-light);
-    line-height: 1.6;
-    margin-top: 2.4rem;
-    padding-left: 1.5rem;
-    border-left: 2px solid var(--gold);
-  }
-
-  /* ── FAQ ── */
-  #faq { background: var(--stone); }
-  .faq-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 4rem;
-  }
-  .faq-item {
-    background: var(--white);
-    padding: 2rem 2.2rem;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s;
-    cursor: pointer;
-  }
-  .faq-item:hover { border-color: var(--gold); }
-  .faq-q {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.08rem;
-    color: var(--forest);
-    margin-bottom: 0.8rem;
-  }
-  .faq-a {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
-    color: #666;
-    line-height: 1.7;
-  }
-
-  /* ── CTA ── */
-  #cta {
-    position: relative;
-    background:
-      linear-gradient(rgba(46,59,50,0.78), rgba(46,59,50,0.78)),
-      url('https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1600&q=80') center/cover no-repeat;
-    text-align: center;
-    padding: 9rem 2rem;
-  }
-  #cta .section-label { color: var(--gold-light); }
-  #cta .section-title { color: var(--cream); margin: 0 auto 1.2rem; }
-  #cta .section-body { color: rgba(244,241,236,0.7); margin: 0 auto 3rem; text-align: center; }
-  #cta .divider { margin: 1.6rem auto; }
-  .cta-btn {
-    display: inline-block;
-    font-size: 0.76rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #000;
-    background: var(--gold);
-    padding: 1.15rem 3.2rem;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.3s;
-    margin: 0 0.6rem;
-  }
-  .cta-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
-  .cta-btn.outline {
-    background: transparent;
-    color: var(--cream);
-    border: 1px solid rgba(195,165,107,0.6);
-  }
-  .cta-btn.outline:hover { background: rgba(195,165,107,0.1); }
-
-  /* ── FOOTER ── */
-  footer {
-    background: #1e2820;
-    padding: 4rem 0 2.4rem;
-    color: rgba(244,241,236,0.5);
-  }
-  .footer-inner {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
-  }
-  .footer-brand-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--cream);
-    margin-bottom: 1rem;
-  }
-  .footer-tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: rgba(244,241,236,0.5);
-    margin-bottom: 1.4rem;
-    max-width: 260px;
-  }
-  .footer-heading {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
-  }
-  .footer-links { list-style: none; }
-  .footer-links li { margin-bottom: 0.6rem; }
-  .footer-links a {
-    font-size: 0.85rem;
-    color: rgba(244,241,236,0.5);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .footer-links a:hover { color: var(--gold-light); }
-  .footer-bottom {
-    border-top: 1px solid rgba(195,165,107,0.15);
-    padding-top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-  }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    nav { padding: 1.2rem 1.8rem; }
-    .nav-links { display: none; }
-    .intro-grid, .brownstone-inner { grid-template-columns: 1fr; gap: 3rem; }
-    .packages-grid { grid-template-columns: 1fr; gap: 2px; }
-    .steps-grid { grid-template-columns: 1fr 1fr; }
-    .steps-grid::before { display: none; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-    .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: span 1; }
-    .faq-grid { grid-template-columns: 1fr; }
-    .footer-inner { grid-template-columns: 1fr 1fr; }
-    .intro-image::before { display: none; }
-  }
-`
+import { useEffect } from "react";
+import supabase from "../lib/supabase";
 
 const bodyHTML = `
-
 <!-- NAV -->
-<nav id="main-nav">
+<nav>
   <a href="#hero" class="nav-logo">Seasonal Splendor</a>
   <ul class="nav-links">
     <li><a href="#intro">About</a></li>
     <li><a href="#packages">Packages</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="/contact" class="nav-cta">Book a Consultation</a></li>
   </ul>
+  <a href="/contact" class="nav-cta">Book Consultation</a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu-backdrop" id="mobileBackdrop"></div>
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation menu">
+  <ul class="mobile-menu-links">
+    <li><a href="#intro">About</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="/contact" class="mobile-menu-cta">Book a Consultation</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg"></div>
+  <img class="hero-bg" src="/images/image_01.jpg" alt="New York City brownstone row with ornate iron railings and flowers" loading="eager" />
+  <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Upper West Side · New York City</p>
-    <h1 class="hero-title">Seasonal<br><em>Splendor</em></h1>
-    <p class="hero-subtitle">Elegant seasonal styling for brownstones and apartments across the Upper West Side.</p>
-    <a href="/contact" class="hero-btn">Book a Consultation</a>
+    <h1>Brownstone<br /><em>Exterior</em><br />Styling</h1>
+    <p class="hero-sub">Seasonal décor installations crafted for the stoops, entries, and façades of Upper West Side brownstones — from holiday wreaths to festive planters that honor the architecture.</p>
+    <div class="hero-btns">
+      <a href="/contact" class="btn-gold">Book a Consultation</a>
+      <a href="#packages" class="btn-gold-outline">View Packages</a>
+    </div>
   </div>
+  <div class="seasons-badge"><span class="s-num">4</span><span class="s-lbl">Seasons<br>of Beauty</span></div>
   <div class="hero-scroll">Scroll</div>
 </section>
 
-<!-- BRAND INTRO -->
+<!-- INTRO STRIP -->
+<div class="intro-strip">
+  <p>"Historic brownstones deserve décor that honors their <span>character</span> — installed with care, removed without a trace."</p>
+</div>
+
+<!-- ABOUT -->
 <section id="intro">
-  <div class="container">
-    <div class="intro-grid">
-      <div class="intro-image reveal">
-        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900&q=80" alt="Elegant interior living room">
-        <div class="intro-badge">
-          <span>4</span>
-          <span>Seasons of Beauty</span>
-        </div>
-      </div>
-      <div class="reveal reveal-delay-2">
-        <p class="section-label">Our Story</p>
-        <h2 class="section-title">A Beautiful Home<br>for <em>Every Season</em></h2>
-        <div class="divider"></div>
-        <p class="section-body">
-          Seasonal Splendor creates thoughtfully designed décor installations that bring warmth, charm, and elegance to your home throughout the year.
-        </p>
-        <p class="section-body" style="margin-top:1.2rem;">
-          Our team provides a full-service decorating experience — from design and sourcing to installation and seasonal refresh. We specialize in Upper West Side homes, where historic architecture and timeless interiors deserve décor that complements their character.
-        </p>
-        <a href="#cta" style="display:inline-block; margin-top:2.4rem; font-size:0.76rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--forest); text-decoration:none; border-bottom:2px solid var(--gold); padding-bottom:3px;">Begin Your Transformation</a>
-      </div>
-    </div>
+  <div class="about-images">
+    <img class="about-img-single" src="/images/image_02.jpg" alt="Upper West Side brownstone stoop with ornate iron railings" loading="lazy" />
+  </div>
+  <div class="about-text">
+    <p class="section-eyebrow">Our Story</p>
+    <h2>Exterior <em>Elegance</em><br />for Every Season</h2>
+    <p>Seasonal Splendor specializes in <strong>exterior décor installations</strong> for Upper West Side brownstones. We style the parts of your home that greet the world — stoops, entries, lanterns, railings, and planters — transforming them for each holiday season.</p>
+    <p>We understand the architecture. Many UWS brownstones are over a century old, and every installation is planned with their stonework and ironwork in mind. We use <strong>non-damaging, reversible methods</strong> that leave no trace on your building's historic fabric.</p>
+    <p>We do not serve any area outside of the Upper West Side. This focus lets us deliver a truly attentive, meticulous service to our neighbors.</p>
+    <div class="service-area-pill">Upper West Side, Manhattan — Exclusively</div>
   </div>
 </section>
 
 <!-- PACKAGES -->
 <section id="packages">
-  <div class="container">
-    <div class="reveal" style="text-align:center;">
-      <p class="section-label">Curated Services</p>
-      <h2 class="section-title" style="color:var(--cream); margin:0 auto;">Our Signature<br><em>Seasonal Packages</em></h2>
-      <div class="divider" style="margin:1.6rem auto;"></div>
+  <div class="packages-header fade-up">
+    <p class="section-eyebrow">Curated Services</p>
+    <h2>Our Signature<em>Seasonal Packages</em></h2>
+    <div class="packages-header-rule"></div>
+    <p style="color:var(--muted);font-size:0.9rem;max-width:520px;margin:1.4rem auto 0;line-height:1.75;">All packages are exterior-only, designed for brownstone stoops, entryways, and façades on the Upper West Side.</p>
+  </div>
+  <div class="packages-grid">
+    <div class="pkg-card fade-up">
+      <div class="pkg-season-bar">Holiday Entry</div>
+      <div class="pkg-body">
+        <div class="pkg-name">The Brownstone<br />Entry Package</div>
+        <div class="pkg-tagline">A polished, festive entry that makes an impression from the sidewalk.</div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-includes-label">Includes</div>
+        <ul class="pkg-includes">
+          <li>Holiday wreath (custom or seasonal)</li>
+          <li>Lantern styling with seasonal accents</li>
+          <li>Decorative stoop planters</li>
+          <li>Ribbon &amp; garland for railings</li>
+          <li>Professional installation &amp; removal</li>
+        </ul>
+        <div class="pkg-price-row">
+          <div class="pkg-price-label">Starting at</div>
+          <div class="pkg-price">$495</div>
+          <div class="pkg-price-note">Includes install + end-of-season removal</div>
+        </div>
+        <button class="pkg-enquire-link" onclick="window.openModal('Brownstone Entry Package')">Enquire</button>
+      </div>
     </div>
-    <div class="packages-grid">
-      <div class="package-card reveal reveal-delay-1">
-        <p class="package-season">Year-Round Entry</p>
-        <h3 class="package-name">The Brownstone<br>Entry Package</h3>
-        <p class="package-includes">Includes</p>
-        <ul class="package-list">
-          <li>Seasonal wreath</li>
-          <li>Lantern styling</li>
-          <li>Decorative planters</li>
-          <li>Installation &amp; removal</li>
+    <div class="pkg-card fade-up">
+      <div class="pkg-season-bar">Winter · Most Popular</div>
+      <div class="pkg-body">
+        <div class="pkg-name">The Holiday<br />Signature Package</div>
+        <div class="pkg-tagline">A full brownstone exterior transformation for Thanksgiving through New Year's.</div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-includes-label">Includes</div>
+        <ul class="pkg-includes">
+          <li>Grand stoop garland with lights</li>
+          <li>Wreath on entry door &amp; gate</li>
+          <li>Tall planter arrangements with winter greens</li>
+          <li>Lantern &amp; railing décor throughout</li>
+          <li>Window box winter styling</li>
+          <li>Installation, mid-season refresh &amp; removal</li>
         </ul>
-        <a href="/contact" class="package-cta">Enquire</a>
+        <button class="pkg-enquire-link" onclick="window.openModal('Holiday Signature Package')">Enquire</button>
       </div>
-      <div class="package-card reveal reveal-delay-2">
-        <p class="package-season">Winter</p>
-        <h3 class="package-name">The Holiday<br>Signature Package</h3>
-        <p class="package-includes">Includes</p>
-        <ul class="package-list">
-          <li>Christmas tree styling</li>
-          <li>Mantel garland</li>
-          <li>Staircase décor</li>
-          <li>Entryway wreath</li>
+    </div>
+    <div class="pkg-card fade-up">
+      <div class="pkg-season-bar">All Four Seasons</div>
+      <div class="pkg-body">
+        <div class="pkg-name">The Four-Season<br />Exterior Package</div>
+        <div class="pkg-tagline">Year-round exterior styling: spring florals, summer lush, autumn harvest, winter holiday.</div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-includes-label">Includes</div>
+        <ul class="pkg-includes">
+          <li>Spring: fresh florals &amp; seasonal planters</li>
+          <li>Summer: lush greenery &amp; bright arrangements</li>
+          <li>Autumn: harvest wreaths &amp; pumpkin styling</li>
+          <li>Winter/Holiday: full exterior installation</li>
+          <li>Four professional install &amp; removal visits</li>
+          <li>Priority scheduling &amp; client management</li>
         </ul>
-        <a href="/contact" class="package-cta">Enquire</a>
-      </div>
-      <div class="package-card reveal reveal-delay-3">
-        <p class="package-season">All Four Seasons</p>
-        <h3 class="package-name">The Four-Season<br>Home Package</h3>
-        <p class="package-includes">Includes</p>
-        <ul class="package-list">
-          <li>Spring refresh</li>
-          <li>Summer styling</li>
-          <li>Autumn harvest décor</li>
-          <li>Winter holiday installation</li>
-        </ul>
-        <a href="/contact" class="package-cta">Enquire</a>
+        <button class="pkg-enquire-link" onclick="window.openModal('Four-Season Exterior Package')">Enquire</button>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ENQUIRE MODAL -->
+<div class="modal-overlay" id="enquireModal">
+  <div class="modal">
+    <button class="modal-close" onclick="window.closeModal()" aria-label="Close">×</button>
+    <div class="modal-eyebrow">Package Enquiry</div>
+    <h3 id="modalTitle">Enquire About This Package</h3>
+    <form onsubmit="window.handleFormSubmit(event)">
+      <input type="hidden" id="modalPackageField" name="package" value="" />
+      <div class="form-row">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required placeholder="Jane Smith" />
+      </div>
+      <div class="form-row">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="jane@example.com" />
+      </div>
+      <div class="form-row">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required placeholder="(212) 555-0100" />
+      </div>
+      <div class="form-row">
+        <label for="address">Brownstone Address (UWS)</label>
+        <input type="text" id="address" name="address" required placeholder="123 W 87th St, New York, NY" />
+      </div>
+      <div class="form-row">
+        <label for="season">Preferred Season / Occasion</label>
+        <select id="season" name="season" required>
+          <option value="" disabled selected>Select a season</option>
+          <option>Holiday (Thanksgiving – New Year's)</option>
+          <option>Spring</option>
+          <option>Summer</option>
+          <option>Autumn / Harvest</option>
+          <option>All Four Seasons</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" name="notes" required placeholder="Tell us about your home, any special requests, or questions…"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Submit Enquiry</button>
+    </form>
+  </div>
+</div>
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <div class="container">
-    <div class="reveal" style="text-align:center;">
-      <p class="section-label">The Process</p>
-      <h2 class="section-title" style="text-align:center;">How It <em>Works</em></h2>
-      <div class="divider" style="margin:1.6rem auto;"></div>
+<section id="process">
+  <div class="process-header fade-up">
+    <p class="section-eyebrow">The Process</p>
+    <h2>How It <em>Works</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="step fade-up">
+      <div class="step-num">01</div>
+      <h4>Consultation</h4>
+      <p>We assess your brownstone's exterior, discuss your aesthetic goals, and plan the installation approach.</p>
     </div>
-    <div class="steps-grid">
-      <div class="step reveal reveal-delay-1">
-        <div class="step-num">01</div>
-        <h3 class="step-title">Consultation</h3>
-        <p class="step-body">We learn about your home, style preferences, and seasonal goals.</p>
+    <div class="step fade-up">
+      <div class="step-num">02</div>
+      <h4>Design</h4>
+      <p>Our team curates a seasonal décor plan tailored to your stoop, entryway, and façade's dimensions and architecture.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">03</div>
+      <h4>Installation</h4>
+      <p>Professional installation with non-damaging, reversible methods. No drilling, no damage to stonework or ironwork.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">04</div>
+      <h4>Removal</h4>
+      <p>We return at season's end to carefully remove all décor, leaving your home exactly as we found it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header fade-up">
+    <p class="section-eyebrow">Exterior Transformations</p>
+    <h2>Brownstones <em>We've Styled</em></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-col">
+      <div class="gallery-item">
+        <img src="/images/image_03.jpg" alt="Autumn Harvest Stoop" loading="lazy" />
+        <div class="gallery-item-caption">Autumn Harvest Stoop</div>
       </div>
-      <div class="step reveal reveal-delay-2">
-        <div class="step-num">02</div>
-        <h3 class="step-title">Design</h3>
-        <p class="step-body">Our team curates décor tailored specifically to your space.</p>
+      <div class="gallery-item">
+        <img src="/images/image_04.jpg" alt="Luxury Holiday Wreath" loading="lazy" />
+        <div class="gallery-item-caption">Luxury Holiday Wreath</div>
       </div>
-      <div class="step reveal reveal-delay-3">
-        <div class="step-num">03</div>
-        <h3 class="step-title">Installation</h3>
-        <p class="step-body">Professional installation handled with meticulous care.</p>
+      <div class="gallery-item">
+        <img src="/images/image_05.jpg" alt="Autumn Harvest Entry" loading="lazy" />
+        <div class="gallery-item-caption">Autumn Harvest Entry</div>
       </div>
-      <div class="step reveal reveal-delay-4">
-        <div class="step-num">04</div>
-        <h3 class="step-title">Seasonal Refresh</h3>
-        <p class="step-body">We return to remove décor or prepare for the next season.</p>
+      <div class="gallery-item">
+        <img src="/images/image_06.jpg" alt="Brownstone Entry" loading="lazy" />
+        <div class="gallery-item-caption">Brownstone Entry</div>
+      </div>
+    </div>
+    <div class="gallery-col">
+      <div class="gallery-item">
+        <img src="/images/image_07.jpg" alt="Summer Patriotic Wreath" loading="lazy" />
+        <div class="gallery-item-caption">Summer Patriotic Wreath</div>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/image_17.jpg" alt="Spring Florals" loading="lazy" />
+        <div class="gallery-item-caption">Spring Florals</div>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/image_10.jpg" alt="Wreath Styling" loading="lazy" />
+        <div class="gallery-item-caption">Wreath Styling</div>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/image_18.jpg" alt="Easter Decor" loading="lazy" />
+        <div class="gallery-item-caption">Easter Decor</div>
+      </div>
+    </div>
+    <div class="gallery-col">
+      <div class="gallery-item">
+        <img src="/images/image_11.jpg" alt="Lantern &amp; Garland" loading="lazy" />
+        <div class="gallery-item-caption">Lantern &amp; Garland</div>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/image_13.jpg" alt="Holiday Exterior" loading="lazy" />
+        <div class="gallery-item-caption">Holiday Exterior</div>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/image_14.jpg" alt="Ornate Door Wreath" loading="lazy" />
+        <div class="gallery-item-caption">Ornate Door Wreath</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY_PLACEHOLDER -->
-
-<!-- BROWNSTONE EXPERTISE -->
-<section id="brownstone">
-  <div class="container">
-    <div class="brownstone-inner">
-      <div class="reveal">
-        <p class="section-label">Our Expertise</p>
-        <h2 class="section-title">Designed for<br><em>Historic Brownstones</em></h2>
-        <div class="divider"></div>
-        <p class="section-body">
-          Many homes in the Upper West Side are over a century old. Seasonal Splendor uses installation methods designed specifically for historic homes — so decorations are placed safely, without damaging stonework, doors, or railings.
-        </p>
-        <blockquote class="brownstone-quote">
-          Leave no trace except a beautifully styled home.
-        </blockquote>
+<!-- EXPERTISE -->
+<section class="expertise-section">
+  <div class="expertise-grid">
+    <div class="expertise-text fade-up">
+      <p class="section-eyebrow">Our Expertise</p>
+      <h2>Designed for <em>Historic<br />Brownstones</em></h2>
+      <div class="expertise-rule"></div>
+      <p>Many homes in the Upper West Side are over a century old. Seasonal Splendor uses installation methods designed specifically for historic homes — so decorations are placed safely, without damaging stonework, doors, or railings.</p>
+      <p>We have maintained a zero-damage record across every installation we have ever completed, including several on Landmarks Preservation Commission–protected blocks.</p>
+      <blockquote class="expertise-quote">"Leave no trace except a beautifully styled home."</blockquote>
+      <div class="trust-pills">
+        <span class="trust-pill">Zero Surface Damage</span>
+        <span class="trust-pill">LPC-Compliant</span>
+        <span class="trust-pill">Fully Insured</span>
+        <span class="trust-pill">Historic-Safe Fixings</span>
+        <span class="trust-pill">Sustainably Sourced</span>
       </div>
-      <div class="brownstone-image reveal reveal-delay-2">
-        <img src="/images/historic_brownstone_image copy.jpg" alt="Upper West Side brownstone">
+    </div>
+    <div class="expertise-img-wrap fade-up">
+      <img src="/images/image_15.jpg" alt="Grand holiday garland arch with red ornaments on classic door" loading="lazy" />
+      <div class="expertise-img-caption">
+        <p>Leave no trace except a beautifully styled home.</p>
       </div>
     </div>
   </div>
@@ -782,149 +301,245 @@ const bodyHTML = `
 
 <!-- FAQ -->
 <section id="faq">
-  <div class="container">
-    <div class="reveal" style="text-align:center;">
-      <p class="section-label">Questions</p>
-      <h2 class="section-title" style="text-align:center;">Frequently<br><em>Asked</em></h2>
-      <div class="divider" style="margin:1.6rem auto;"></div>
+  <div class="faq-left fade-up">
+    <p class="section-eyebrow">Questions</p>
+    <h2>Frequently<br /><em>Asked</em></h2>
+  </div>
+  <div class="faq-list fade-up">
+    <div class="faq-item open">
+      <button class="faq-q" onclick="window.toggleFaq(this)">What areas do you serve?</button>
+      <div class="faq-a">We serve the Upper West Side of Manhattan exclusively. This focus allows us to provide a truly attentive, high-quality experience for our neighbors. We are not currently taking orders from other neighborhoods.</div>
     </div>
-    <div class="faq-grid">
-      <div class="faq-item reveal reveal-delay-1">
-        <h3 class="faq-q">What areas do you serve?</h3>
-        <p class="faq-a">Our primary focus is the Upper West Side of Manhattan, where we specialize in brownstones and classic apartment buildings.</p>
-      </div>
-      <div class="faq-item reveal reveal-delay-2">
-        <h3 class="faq-q">Do you provide the decorations?</h3>
-        <p class="faq-a">Yes — we source and install all décor. You don't need to own or store anything. We handle everything from concept to removal.</p>
-      </div>
-      <div class="faq-item reveal reveal-delay-1">
-        <h3 class="faq-q">Do you remove decorations at season's end?</h3>
-        <p class="faq-a">Yes, we return at the end of each season to carefully remove all décor, leaving your home exactly as we found it.</p>
-      </div>
-      <div class="faq-item reveal reveal-delay-2">
-        <h3 class="faq-q">How far in advance should I book?</h3>
-        <p class="faq-a">Holiday installations book several weeks in advance. We recommend reaching out early to secure your preferred dates, especially for Thanksgiving and Christmas.</p>
-      </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="window.toggleFaq(this)">Do you only style exteriors?</button>
+      <div class="faq-a">Yes — we specialize exclusively in exterior styling. This includes stoops, front entries, lanterns, railings, window boxes, and planters. We do not offer interior decorating services at this time.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="window.toggleFaq(this)">Do you provide the decorations?</button>
+      <div class="faq-a">Yes. We source, deliver, install, and remove all décor. You don't need to purchase or store anything. We handle everything from concept to final removal.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="window.toggleFaq(this)">Will you damage my brownstone?</button>
+      <div class="faq-a">Never. We use only non-damaging, reversible installation methods — no drilling, no adhesives that harm stonework, and no pressure on historic ironwork beyond its safe tolerance. We leave no trace except a beautifully styled home.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="window.toggleFaq(this)">Do you remove decorations at season's end?</button>
+      <div class="faq-a">Yes. Removal is included in every package. We return at the end of the season and restore your home to its original condition, with care.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="window.toggleFaq(this)">How far in advance should I book?</button>
+      <div class="faq-a">Holiday installations (Thanksgiving through New Year's) fill up quickly — we recommend reaching out at least 4–6 weeks in advance to secure your preferred installation window.</div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
 <section id="cta">
-  <div class="container">
-    <p class="section-label">Get Started</p>
-    <h2 class="section-title">Transform Your Home<br><em>for the Season</em></h2>
-    <div class="divider"></div>
-    <p class="section-body">Schedule your consultation today and discover what your home looks like at its most beautiful.</p>
-    <div style="margin-top:0.5rem;">
-      <a href="/contact" class="cta-btn">Book a Consultation</a>
-      <a href="#packages" class="cta-btn outline">View Packages</a>
+  <img class="cta-bg" src="/images/image_16.jpg" alt="New York City brownstones in autumn" />
+  <div class="cta-overlay"></div>
+  <div class="cta-inner fade-up">
+    <p class="section-eyebrow">Get Started</p>
+    <div class="cta-rule"></div>
+    <h2>Transform Your <em>Brownstone</em><br />for the Season</h2>
+    <p>From a single seasonal wreath to a full four-season exterior transformation — Seasonal Splendor brings warmth, elegance, and craft to every stoop, entry, and façade on the Upper West Side. Schedule your consultation and discover what your brownstone looks like at its most beautiful.</p>
+    <div class="cta-btns">
+      <a href="/contact" class="btn-gold">Book a Consultation</a>
+      <a href="#packages" class="btn-outline-lt">View Packages</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div>
-        <div class="footer-brand-name">Seasonal Splendor</div>
-        <p class="footer-tagline">Elegant seasonal styling for Upper West Side brownstones and apartments in New York City.</p>
-        <p style="font-size:0.78rem; color:rgba(244,241,236,0.4);">hello@seasonalsplendor.com</p>
-      </div>
-      <div>
-        <p class="footer-heading">Navigate</p>
-        <ul class="footer-links">
-          <li><a href="#intro">About</a></li>
-          <li><a href="#packages">Packages</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="footer-heading">Services</p>
-        <ul class="footer-links">
-          <li><a href="#">Spring Styling</a></li>
-          <li><a href="#">Summer Styling</a></li>
-          <li><a href="#">Autumn Décor</a></li>
-          <li><a href="#">Holiday Installation</a></li>
-          <li><a href="#">Entryway Styling</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="footer-heading">Service Area</p>
-        <ul class="footer-links">
-          <li><a href="#">Upper West Side</a></li>
-          <li><a href="#">New York City</a></li>
-        </ul>
-        <p class="footer-heading" style="margin-top:1.8rem;">Follow</p>
-        <ul class="footer-links">
-          <li><a href="https://www.instagram.com/seasonal.splendornyc/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Seasonal Splendor. All rights reserved.</span>
-      <span><a href="/privacy-policy" style="color:inherit; text-decoration:none;">Privacy Policy</a></span>
-    </div>
+  <div class="footer-brand">
+    <a href="#hero" class="footer-logo">Seasonal Splendor</a>
+    <p>Elegant exterior seasonal styling for Upper West Side brownstones in New York City. Serving our neighborhood exclusively.</p>
+    <a href="mailto:hello@seasonalsplendors.com" class="email">hello@seasonalsplendors.com</a>
+  </div>
+  <div class="footer-col">
+    <h5>Navigate</h5>
+    <ul>
+      <li><a href="#intro">About</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h5>Services</h5>
+    <ul>
+      <li><a href="#packages">Holiday Entry Package</a></li>
+      <li><a href="#packages">Holiday Signature</a></li>
+      <li><a href="#packages">Four-Season Exterior</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h5>Follow Us</h5>
+    <a href="https://www.instagram.com/seasonal.splendornyc/" target="_blank" rel="noopener" class="footer-instagram-link">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+      </svg>
+      @seasonal.splendornyc
+    </a>
+    <p style="font-size:0.78rem;margin-top:1.2rem;color:rgba(253,250,247,0.4);">Service Area<br />Upper West Side, Manhattan<br />New York City</p>
   </div>
 </footer>
-`
-
-const galleryImages = [
-  { src: '/images/autum-entry.jpg', alt: 'Autumn Entry' },
-  { src: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=600&q=80', alt: 'Holiday Interiors' },
-  { src: '/images/brownstone_stoop.jpg', alt: 'Brownstone Stoop' },
-  { src: '/images/spring_floral.webp', alt: 'Spring Florals' },
-  { src: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=600&q=80', alt: 'Winter Holiday' },
-  { src: '/images/dining_table.avif', alt: 'Dining Styling' },
-]
+<div class="footer-bottom">
+  <span>© 2026 Seasonal Splendor. All rights reserved.</span>
+  <a href="/privacy-policy">Privacy Policy</a>
+</div>
+`;
 
 export default function Home() {
   useEffect(() => {
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal')
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible')
-          observer.unobserve(e.target)
-        }
-      })
-    }, { threshold: 0.12 })
-    reveals.forEach(el => observer.observe(el))
+    // Scroll animations
+    const fadeEls = document.querySelectorAll(".fade-up");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" },
+    );
+    fadeEls.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add("visible");
+      } else {
+        observer.observe(el);
+      }
+    });
 
-    return () => observer.disconnect()
-  }, [])
+    // Hamburger menu
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobileBackdrop = document.getElementById("mobileBackdrop");
 
-  const [before, after] = bodyHTML.split('<!-- GALLERY_PLACEHOLDER -->')
+    function openMobileMenu() {
+      hamburger.classList.add("open");
+      mobileMenu.classList.add("open");
+      mobileBackdrop.classList.add("open");
+      hamburger.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeMobileMenu() {
+      hamburger.classList.remove("open");
+      mobileMenu.classList.remove("open");
+      mobileBackdrop.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.contains("open")
+        ? closeMobileMenu()
+        : openMobileMenu();
+    });
+    mobileBackdrop.addEventListener("click", closeMobileMenu);
+    mobileMenu
+      .querySelectorAll("a")
+      .forEach((a) => a.addEventListener("click", closeMobileMenu));
+
+    // Global functions for inline handlers
+    window.toggleFaq = (btn) => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains("open");
+      document
+        .querySelectorAll(".faq-item")
+        .forEach((i) => i.classList.remove("open"));
+      if (!wasOpen) item.classList.add("open");
+    };
+
+    window.openModal = (packageName) => {
+      document.getElementById("modalTitle").textContent =
+        "Enquire — " + packageName;
+      document.getElementById("modalPackageField").value = packageName;
+      document.getElementById("enquireModal").classList.add("active");
+      document.body.style.overflow = "hidden";
+    };
+
+    window.closeModal = () => {
+      document.getElementById("enquireModal").classList.remove("active");
+      document.body.style.overflow = "";
+    };
+
+    window.handleFormSubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.textContent = "Sending…";
+      submitBtn.disabled = true;
+
+      const data = {
+        name: document.getElementById("fullName").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        address: document.getElementById("address").value,
+        service: [
+          document.getElementById("modalPackageField").value,
+          document.getElementById("season").value,
+        ]
+          .filter(Boolean)
+          .join(" — "),
+        message: document.getElementById("notes").value,
+      };
+
+      const { error } = await supabase
+        .from("contact_submissions")
+        .insert([data]);
+
+      if (!error) {
+        fetch(
+          "https://ecvsbunmfestnrhfgdjl.supabase.co/functions/v1/resend-email",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify(data),
+          },
+        ).catch(console.error);
+      }
+
+      e.target.innerHTML = error
+        ? `<p style="color:#b94a48;font-size:0.88rem;">Something went wrong. Please try again.</p>`
+        : `<div style="padding:1.4rem 1.8rem;background:rgba(28,58,40,0.06);border-left:3px solid var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--green);line-height:1.7;">Thank you for your enquiry! We'll be in touch within 1–2 business days.</div>`;
+    };
+
+    const modal = document.getElementById("enquireModal");
+    const onModalClick = (e) => {
+      if (e.target === modal) window.closeModal();
+    };
+    modal.addEventListener("click", onModalClick);
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        window.closeModal();
+        closeMobileMenu();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("keydown", onKeyDown);
+      modal.removeEventListener("click", onModalClick);
+      delete window.toggleFaq;
+      delete window.openModal;
+      delete window.closeModal;
+      delete window.handleFormSubmit;
+    };
+  }, []);
 
   return (
     <>
-      <style>{css}</style>
-      <div dangerouslySetInnerHTML={{ __html: before }} />
-      <section id="gallery">
-        <div className="container">
-          <div className="gallery-header reveal">
-            <p className="section-label">Seasonal Transformations</p>
-            <h2 className="section-title">Homes <em>We've Styled</em></h2>
-            <div className="divider" style={{ margin: '1.6rem auto' }} />
-            <p className="section-body">Each installation is curated for the character of the home and the beauty of the season.</p>
-          </div>
-        </div>
-        <div className="container">
-          <Masonry breakpointCols={{ default: 3, 768: 2, 480: 1 }} className="masonry-grid" columnClassName="masonry-col">
-            {galleryImages.map((img) => (
-              <div key={img.src} className="gallery-item">
-                <img src={img.src} alt={img.alt} />
-                <div className="gallery-overlay"><span className="gallery-label">{img.alt}</span></div>
-              </div>
-            ))}
-          </Masonry>
-        </div>
-      </section>
-      <div dangerouslySetInnerHTML={{ __html: after }} />
+      <div dangerouslySetInnerHTML={{ __html: bodyHTML }} />
     </>
-  )
+  );
 }
