@@ -456,7 +456,17 @@ export default function Home() {
       if (!wasOpen) item.classList.add("open");
     };
 
+    const modalForm = document.querySelector("#enquireModal form");
+    const originalFormHTML = modalForm.innerHTML;
+
     window.openModal = (packageName) => {
+      // Restore form if a previous submission replaced it with a success/error message
+      const form = document.querySelector("#enquireModal form");
+      if (!form.querySelector('button[type="submit"]')) {
+        form.innerHTML = originalFormHTML;
+      } else {
+        form.reset();
+      }
       document.getElementById("modalTitle").textContent =
         "Enquire — " + packageName;
       document.getElementById("modalPackageField").value = packageName;
