@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
           <div className={styles.policyBody}>
 
             <h2>1. Who We Are</h2>
-            <p>Seasonal Splendor is a seasonal home styling service based in the Upper West Side, New York City. We can be reached at <a href="mailto:hello@seasonalsplendor.com">hello@seasonalsplendor.com</a>.</p>
+            <p>Seasonal Splendor is a seasonal home styling service based in the Upper West Side, New York City. We can be reached at <a href="mailto:info@seasonalsplendors.com">info@seasonalsplendors.com</a>.</p>
 
             <h2>2. Information We Collect</h2>
             <p>When you submit our contact form, we collect:</p>
@@ -52,13 +52,13 @@ export default function PrivacyPolicyPage() {
             <p>Our website does not use tracking or advertising cookies. We may use essential cookies required for the site to function correctly.</p>
 
             <h2>6. Your Rights</h2>
-            <p>You have the right to request access to, correction of, or deletion of any personal data we hold about you. To make a request, email us at <a href="mailto:hello@seasonalsplendor.com">hello@seasonalsplendor.com</a>.</p>
+            <p>You have the right to request access to, correction of, or deletion of any personal data we hold about you. To make a request, email us at <a href="mailto:info@seasonalsplendors.com">info@seasonalsplendors.com</a>.</p>
 
             <h2>7. Changes to This Policy</h2>
             <p>We may update this policy from time to time. Any changes will be posted on this page with an updated date.</p>
 
             <h2>8. Contact</h2>
-            <p>For any privacy-related questions, please contact us at <a href="mailto:hello@seasonalsplendor.com">hello@seasonalsplendor.com</a>.</p>
+            <p>For any privacy-related questions, please contact us at <a href="mailto:info@seasonalsplendors.com">info@seasonalsplendors.com</a>.</p>
 
           </div>
         </div>
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
         <div className={styles.footerBrand}>
           <a href="/" className={styles.footerLogo}>Seasonal Splendor</a>
           <p>Elegant exterior seasonal styling for Upper West Side brownstones in New York City. Serving our neighborhood exclusively.</p>
-          <a href="mailto:hello@seasonalsplendors.com" className={styles.footerEmail}>hello@seasonalsplendors.com</a>
+          <a href="mailto:info@seasonalsplendors.com" className={styles.footerEmail}>info@seasonalsplendors.com</a>
         </div>
         <div className={styles.footerCol}>
           <h5>Navigate</h5>

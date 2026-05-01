@@ -100,7 +100,7 @@ export default function ContactPage() {
                 <div className={styles.contactDetailItem}>
                   <span className={styles.contactDetailLabel}>Email</span>
                   <span className={styles.contactDetailValue}>
-                    hello@seasonalsplendor.com
+                    info@seasonalsplendors.com
                   </span>
                 </div>
                 <div className={styles.contactDetailItem}>
@@ -245,10 +245,10 @@ export default function ContactPage() {
             New York City. Serving our neighborhood exclusively.
           </p>
           <a
-            href="mailto:hello@seasonalsplendors.com"
+            href="mailto:info@seasonalsplendors.com"
             className={styles.footerEmail}
           >
-            hello@seasonalsplendors.com
+            info@seasonalsplendors.com
           </a>
         </div>
         <div className={styles.footerCol}>

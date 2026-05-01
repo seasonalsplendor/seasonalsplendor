@@ -354,7 +354,7 @@ const bodyHTML = `
   <div class="footer-brand">
     <a href="#hero" class="footer-logo">Seasonal Splendor</a>
     <p>Elegant exterior seasonal styling for Upper West Side brownstones in New York City. Serving our neighborhood exclusively.</p>
-    <a href="mailto:hello@seasonalsplendors.com" class="email">hello@seasonalsplendors.com</a>
+    <a href="mailto:info@seasonalsplendors.com" class="email">info@seasonalsplendors.com</a>
   </div>
   <div class="footer-col">
     <h5>Navigate</h5>
