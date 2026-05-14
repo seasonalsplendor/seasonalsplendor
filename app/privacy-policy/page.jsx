@@ -1,5 +1,11 @@
 import styles from './page.module.css'
 
+export const metadata = {
+  title: { absolute: 'Privacy Policy | Seasonal Splendors' },
+  description: 'Privacy policy for Seasonal Splendors, the Upper West Side seasonal decorating service.',
+  robots: { index: false, follow: false },
+}
+
 export default function PrivacyPolicyPage() {
   return (
     <div className={styles.page}>
