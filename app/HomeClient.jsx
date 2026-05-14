@@ -33,7 +33,7 @@ const bodyHTML = `
 
 <!-- HERO -->
 <section id="hero">
-  <img class="hero-bg" src="/images/image_01.jpg" alt="New York City brownstone row with ornate iron railings and flowers" loading="eager" />
+  <img class="hero-bg" src="/images/image_01.webp" alt="New York City brownstone row with ornate iron railings and flowers" loading="eager" />
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Upper West Side · New York City</p>
@@ -56,7 +56,7 @@ const bodyHTML = `
 <!-- ABOUT -->
 <section id="intro">
   <div class="about-images">
-    <img class="about-img-single" src="/images/image_02.jpg" alt="Upper West Side brownstone stoop with ornate iron railings" loading="lazy" />
+    <img class="about-img-single" src="/images/image_02.webp" alt="Upper West Side brownstone stoop with ornate iron railings" loading="lazy" />
   </div>
   <div class="about-text">
     <p class="section-eyebrow">Our Story</p>
@@ -221,51 +221,51 @@ const bodyHTML = `
   <div class="gallery-grid">
     <div class="gallery-col">
       <div class="gallery-item">
-        <img src="/images/image_03.jpg" alt="Autumn Harvest Stoop" loading="lazy" />
+        <img src="/images/image_03.webp" alt="Autumn Harvest Stoop" loading="lazy" />
         <div class="gallery-item-caption">Autumn Harvest Stoop</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_04.jpg" alt="Luxury Holiday Wreath" loading="lazy" />
+        <img src="/images/image_04.webp" alt="Luxury Holiday Wreath" loading="lazy" />
         <div class="gallery-item-caption">Luxury Holiday Wreath</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_05.jpg" alt="Autumn Harvest Entry" loading="lazy" />
+        <img src="/images/image_05.webp" alt="Autumn Harvest Entry" loading="lazy" />
         <div class="gallery-item-caption">Autumn Harvest Entry</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_06.jpg" alt="Brownstone Entry" loading="lazy" />
+        <img src="/images/image_06.webp" alt="Brownstone Entry" loading="lazy" />
         <div class="gallery-item-caption">Brownstone Entry</div>
       </div>
     </div>
     <div class="gallery-col">
       <div class="gallery-item">
-        <img src="/images/image_07.jpg" alt="Summer Patriotic Wreath" loading="lazy" />
+        <img src="/images/image_07.webp" alt="Summer Patriotic Wreath" loading="lazy" />
         <div class="gallery-item-caption">Summer Patriotic Wreath</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_17.jpg" alt="Spring Florals" loading="lazy" />
+        <img src="/images/image_17.webp" alt="Spring Florals" loading="lazy" />
         <div class="gallery-item-caption">Spring Florals</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_10.jpg" alt="Wreath Styling" loading="lazy" />
+        <img src="/images/image_10.webp" alt="Wreath Styling" loading="lazy" />
         <div class="gallery-item-caption">Wreath Styling</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_18.jpg" alt="Easter Decor" loading="lazy" />
+        <img src="/images/image_18.webp" alt="Easter Decor" loading="lazy" />
         <div class="gallery-item-caption">Easter Decor</div>
       </div>
     </div>
     <div class="gallery-col">
       <div class="gallery-item">
-        <img src="/images/image_11.jpg" alt="Lantern &amp; Garland" loading="lazy" />
+        <img src="/images/image_11.webp" alt="Lantern &amp; Garland" loading="lazy" />
         <div class="gallery-item-caption">Lantern &amp; Garland</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_13.jpg" alt="Holiday Exterior" loading="lazy" />
+        <img src="/images/image_13.webp" alt="Holiday Exterior" loading="lazy" />
         <div class="gallery-item-caption">Holiday Exterior</div>
       </div>
       <div class="gallery-item">
-        <img src="/images/image_14.jpg" alt="Ornate Door Wreath" loading="lazy" />
+        <img src="/images/image_14.webp" alt="Ornate Door Wreath" loading="lazy" />
         <div class="gallery-item-caption">Ornate Door Wreath</div>
       </div>
     </div>
@@ -291,7 +291,7 @@ const bodyHTML = `
       </div>
     </div>
     <div class="expertise-img-wrap fade-up">
-      <img src="/images/image_15.jpg" alt="Grand holiday garland arch with red ornaments on classic door" loading="lazy" />
+      <img src="/images/image_15.webp" alt="Grand holiday garland arch with red ornaments on classic door" loading="lazy" />
       <div class="expertise-img-caption">
         <p>Leave no trace except a beautifully styled home.</p>
       </div>
@@ -335,7 +335,7 @@ const bodyHTML = `
 
 <!-- CTA -->
 <section id="cta">
-  <img class="cta-bg" src="/images/image_16.jpg" alt="New York City brownstones in autumn" />
+  <img class="cta-bg" src="/images/image_16.webp" alt="New York City brownstones in autumn" />
   <div class="cta-overlay"></div>
   <div class="cta-inner fade-up">
     <p class="section-eyebrow">Get Started</p>
